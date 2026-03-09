@@ -1,0 +1,121 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\geometry{
+  a4paper,
+  left=25mm,
+  right=25mm,
+  top=25mm,
+  bottom=25mm
+}
+
+\title{\textbf{Rapport d'Activité et d'Architecture : OCaLi} \\ \large{Online Cameroon Library}}
+\author{AZANGUE LEONEL DELMAT}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\vspace{1.5cm}
+
+\begin{abstract}
+Ce rapport détaille les réalisations récentes sur le projet \textbf{OCaLi} (Online Cameroon Library), décrit l'architecture des différents microservices composant le backend, et présente les ajouts et corrections apportées sur la partie frontend.
+\end{abstract}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+L'application OCaLi est une plateforme de bibliothèque numérique reposant sur une architecture moderne. Afin de garantir une scalabilité optimale, le projet a été divisé entre un backend développé sous forme de microservices avec Node.js, Express et MongoDB, et d'un frontend utilisant notamment le framework Laravel (et ses vues Blade) pour interagir de manière transparente avec les services backend.
+Ce document récapitule les derniers travaux effectués sur ces deux pans matériels de l'application.
+
+\section{Réalisations Récentes (Travaux Effectués)}
+Au cours des derniers cycles de développement, de nombreuses corrections de bugs critiques ainsi que l'intégration de fonctionnalités majeures ont été réalisées :
+
+\begin{itemize}
+    \item \textbf{Restauration du Flux de Paiement Nokash :} Le système de paiement par Mobile Money via la fenêtre modale (popup) Nokash a été entièrement réintégré pour les abonnements. Il a fallu corriger et ré-implémenter les scripts JavaScript ainsi que les vues de l'interface pour assurer un processus de paiement fluide.
+    \item \textbf{Automatisation du Seeding des Données (Base de données) :} Un script de peuplement (seeding) a été implémenté pour injecter automatiquement les plans d'abonnements par défaut (dans MongoDB) et les catégories (dans MySQL) lors de l'initialisation des microservices, évitant ainsi l'absence de données sur les pages de tarification.
+    \item \textbf{Correction de l'Authentification Sociale :} L'authentification via Google et Facebook a été réparée. Le travail a consisté à vérifier et configurer correctement les variables d'environnement OAuth requises par \texttt{docker-compose.yml} et à s'assurer du bon redémarrage du service d'authentification (\textit{Auth Service}).
+    \item \textbf{Résolution de l'erreur d'identifiant externe (\texttt{externalId}) :} Un problème majeur qui bloquait la mise à jour des informations de compte à cause d'un \texttt{externalId} nul a été corrigé afin d'assurer la cohérence et l'intégrité des profils utilisateurs.
+\end{itemize}
+
+\section{Architecture du Backend : Les Microservices}
+Le système backend repose sur une architecture en microservices orchestrée derrière une API Gateway. Voici le descriptif des fonctionnalités pour chaque composant :
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{API Gateway}
+    \begin{itemize}
+        \item Point d'entrée unique de l'application.
+        \item Redirige et achemine (route) de manière sécurisée toutes les requêtes entrantes vers les microservices appropriés.
+        \item Centralise la documentation technique de l'API (Swagger UI).
+    \end{itemize}
+
+    \item \textbf{Auth Service (Service d'Authentification)}
+    \begin{itemize}
+        \item Chargé de la sécurité et de la connexion des utilisateurs.
+        \item Gère l'authentification multi-plateforme (Email/Mot de passe, Google, Facebook OAuth2).
+        \item Émission et validation des jetons de sécurité (JWT).
+    \end{itemize}
+
+    \item \textbf{User Service (Service Utilisateurs)}
+    \begin{itemize}
+        \item Gestion détaillée des profils, des préférences et des données liées aux utilisateurs.
+        \item Prise en compte de la mise à jour des identifiants (comme l'\texttt{externalId}).
+    \end{itemize}
+
+    \item \textbf{Book Service (Service des Livres)}
+    \begin{itemize}
+        \item Cœur du catalogue de la bibliothèque numérique.
+        \item Indexation précise des métadonnées des œuvres et liaison avec le stockage Cloud (fichiers PDF sur AWS S3 / DigitalOcean Spaces).
+    \end{itemize}
+
+    \item \textbf{Subscription Service (Service d'Abonnement)}
+    \begin{itemize}
+        \item Prestation relative à la facturation et aux forfaits.
+        \item Intégration avancée avec des passerelles de paiements locales africaines (Notch Pay, PayUnit, Nokash, PayMooney).
+        \item Rendu dynamique des offres de forfaits (peuplé avec les plans dans MongoDB).
+    \end{itemize}
+
+    \item \textbf{Publication Service (Service des Publications)}
+    \begin{itemize}
+        \item Responsable de la mise en ligne des articles de blogs, actualités internes, ou autres annonces relatives à la plateforme.
+    \end{itemize}
+
+    \item \textbf{Search Service (Service de Recherche)}
+    \begin{itemize}
+        \item Moteur de recherche unifié.
+        \item Permet de requêter de manière transversale l'ensemble du système (livres, catégories, auteurs) avec des performances optimales.
+    \end{itemize}
+\end{enumerate}
+
+\section{Ajouts et Améliorations Côté Frontend}
+Des travaux significatifs ont été menés pour améliorer l'expérience utilisateur et les interfaçages avec le nouveau backend :
+
+\begin{itemize}
+    \item \textbf{Intégration et Refonte des Modales de Paiement (Blade \& JS) :}
+    L'ajout majeur s'est matérialisé par la restauration de la fenêtre modale de Nokash sur l'application Laravel (\texttt{FRONTEND}). Le code JavaScript et les templates Blade (\texttt{NokashService.php}, etc.) ont été mis en cohérence pour capturer l'événement de paiement, afficher dynamiquement le popup à la souscription, et acquitter la transaction auprès du \textit{Subscription Service}.
+    
+    \item \textbf{Refonte et Connectivité API :}
+    Adaptation de l'interface client pour interagir nativement avec l'architecture microservices afin de récupérer les statistiques (Tableau de bord / Dashboard Stats) via de nouveaux endpoints (comme l'appel pour les abonnements, les rôles, les catalogues). Ainsi, les pages présentent dorénavant les données réelles et peuplées.
+    
+    \item \textbf{Améliorations Multi-Plateformes (Adaptabilité et UX) :}
+    Plusieurs retouches ont également été faites pour la prise en charge de l'affichage offline / mobile et l'application globale du Dark Mode (lorsque pertinent), harmonisant les couleurs pour une interface moderne.
+\end{itemize}
+
+\section{Conclusion}
+Les tâches accomplies ont grandement stabilisé l'application \textbf{OCaLi}. L'architecture microservices (Node.js/Express) fournit désormais un environnement modulable et évolutif, renforcé par un système de déploiement (Docker compose) maîtrisé. De plus, le frontend (Laravel/Vue) tire parfaitement parti des nouveaux services distribués, proposant un processus de paiement (Nokash) rétabli et une intégration sociale finalisée. 
+L'application s'inscrit pleinement dans les critères de qualité technique et de réactivité attendus pour un service numérique de grande envergure.
+
+\end{document}

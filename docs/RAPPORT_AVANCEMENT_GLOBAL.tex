@@ -1,0 +1,301 @@
+\documentclass[12pt,a4paper]{article}
+
+% ── Encodage & langue ──────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% ── Mise en page ──────────────────────────────────────────────────────────────
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+
+% ── Typographie ────────────────────────────────────────────────────────────────
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% ── Couleurs & graphiques ─────────────────────────────────────────────────────
+\usepackage[dvipsnames,table]{xcolor}
+\definecolor{OrangeOCaLi}{HTML}{FF6700}
+\definecolor{BleuOCaLi}{HTML}{003E69}
+\definecolor{Vert}{HTML}{10B981}
+\definecolor{Rouge}{HTML}{EF4444}
+\definecolor{GrisClair}{HTML}{F8FAFC}
+\definecolor{GrisFonce}{HTML}{475569}
+\definecolor{AlertBg}{HTML}{FFF7ED}
+\definecolor{AlertBorder}{HTML}{FDBA74}
+
+% ── Liens ─────────────────────────────────────────────────────────────────────
+\usepackage[hidelinks,colorlinks=true,
+            linkcolor=BleuOCaLi,
+            urlcolor=OrangeOCaLi]{hyperref}
+
+% ── Listes ────────────────────────────────────────────────────────────────────
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=4pt, leftmargin=1.5em}
+\setlist[enumerate]{noitemsep, topsep=4pt, leftmargin=1.5em}
+
+% ── Tableaux ──────────────────────────────────────────────────────────────────
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\renewcommand{\arraystretch}{1.45}
+
+% ── En-têtes & pieds de page ──────────────────────────────────────────────────
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{GrisFonce}{OCaLi — Rapport d'Avancement Global}}
+\fancyhead[R]{\small\textcolor{GrisFonce}{AZANGUE LEONEL DELMAT · Mars 2026}}
+\fancyfoot[C]{\small\textcolor{GrisFonce}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Sections colorées ─────────────────────────────────────────────────────────
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries\color{BleuOCaLi}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{OrangeOCaLi}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{GrisFonce}}{}{0em}{}
+
+% ── Encadrés ─────────────────────────────────────────────────────────────────
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\newtcolorbox{alertbox}[1][]{
+  enhanced, breakable,
+  colback=AlertBg, colframe=AlertBorder,
+  fonttitle=\bfseries\color{OrangeOCaLi},
+  title={#1},
+  left=6pt, right=6pt, top=6pt, bottom=6pt
+}
+\newtcolorbox{infobox}{
+  enhanced, breakable,
+  colback=GrisClair, colframe=BleuOCaLi!30,
+  left=6pt, right=6pt, top=6pt, bottom=6pt
+}
+
+% ── Symboles ──────────────────────────────────────────────────────────────────
+\usepackage{pifont}
+\newcommand{\cmark}{\textcolor{Vert}{\ding{51}}}
+\newcommand{\xmark}{\textcolor{Rouge}{\ding{55}}}
+\newcommand{\warn}{\textcolor{OrangeOCaLi}{\ding{115}}}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── Page de titre ─────────────────────────────────────────────────────────────
+\begin{titlepage}
+  \centering
+  \vspace*{3cm}
+
+  {\Huge\bfseries\color{BleuOCaLi} OCaLi Web Platform}\\[0.6em]
+  {\Large\bfseries\color{OrangeOCaLi} Rapport d'Avancement Global}\\[2em]
+
+  \textcolor{GrisFonce}{\rule{10cm}{0.5pt}}\\[1.5em]
+
+  {\large Rédigé par \textbf{AZANGUE LEONEL DELMAT}}\\[0.3em]
+  {\large Développeur Web Full-Stack}\\[0.4em]
+  {\large Pour \textbf{BLAKTEC} — Yaoundé, Cameroun}\\[0.4em]
+  {\large Version : \textbf{Mars 2026}}\\[3em]
+
+  \begin{center}
+    \begin{tabular}{ll}
+      \toprule
+      \textbf{Statut global}      & \textcolor{Vert}{\textbf{Déployable}} \\
+      \textbf{Fonctionnalités}    & Toutes implémentées \\
+      \textbf{Pages à valider}    & 6 (voir Section~2) \\
+      \textbf{Technologie}        & Laravel (PHP 8.x) \\
+      \textbf{Langues}            & Français / Anglais \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+
+  \vfill
+  {\small\textcolor{GrisFonce}{Rédigé par \textbf{AZANGUE LEONEL DELMAT}, Développeur Web — pour BLAKTEC}}
+\end{titlepage}
+
+% ── Table des matières ────────────────────────────────────────────────────────
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Fonctionnalités terminées et opérationnelles}
+
+\subsection{Architecture et socle technique}
+
+\begin{itemize}
+  \item[\cmark] Framework \textbf{Laravel} (backend monolithique, PHP 8.x)
+  \item[\cmark] Authentification classique + \textbf{Socialite} (Google, Facebook)
+  \item[\cmark] Système de thème \textbf{Dark / Light} avec persistance de session
+  \item[\cmark] Multilinguisme \textbf{FR / EN} complet (fichiers \texttt{lang/fr} et \texttt{lang/en})
+  \item[\cmark] Header responsive avec menu \textbf{hamburger mobile} (masquage auto $\leq$ 1024 px)
+  \item[\cmark] Seeds automatiques : 16 catégories, 7 plans d'abonnement, admin initial, paramètres système
+\end{itemize}
+
+\subsection{Espace Lecteur}
+
+\begin{itemize}
+  \item[\cmark] Catalogue, exploration et moteur de recherche avancé (filtres catégorie, type, langue, tri)
+  \item[\cmark] Bibliothèque personnelle (ajout, suppression, rétention 50\,\% post-expiration)
+  \item[\cmark] Lecteur \textbf{PDF.js} intégré avec protection anti-capture d'écran :\\
+        filigrane (watermark), détection de perte de focus, blocage des touches d'impression
+  \item[\cmark] Progression de lecture sauvegardée automatiquement (toutes les 60 secondes)
+  \item[\cmark] Signets de lecture : ajout du signet courant + \emph{click-to-jump} vers la page sauvegardée
+  \item[\cmark] Système d'avis : note 1-5 étoiles + texte, détection doublon, \texttt{is\_verified\_purchase},\\
+        mise à jour automatique de la note moyenne du livre
+\end{itemize}
+
+\subsection{Espace Auteur}
+
+\begin{itemize}
+  \item[\cmark] Publication de livres — CRUD complet : upload PDF (max 100 Mo), couverture JPG/PNG, ISBN/DOI
+  \item[\cmark] Statut de soumission : brouillon $\to$ en attente $\to$ approuvé / rejeté
+  \item[\cmark] Statistiques auteur : vues, lectures et revenus par livre
+  \item[\cmark] Chroniques / articles — CRUD complet
+  \item[\cmark] \textbf{Wallet} : solde en temps réel, montant en attente, 10 dernières transactions
+  \item[\cmark] Demande de retrait MTN MoMo / Orange Money (seuil minimum + seuil de lectures requis)
+\end{itemize}
+
+\subsection{Espace Administrateur}
+
+\begin{itemize}
+  \item[\cmark] Tableau de bord : 7 KPIs clés (utilisateurs, livres, abonnements, revenus…)
+  \item[\cmark] Gestion des utilisateurs : CRUD, activation/désactivation, gestion des rôles
+  \item[\cmark] Validation des publications : aperçu, approbation (email newsletter auto), rejet motivé
+  \item[\cmark] Signalements : \texttt{dismiss}, \texttt{warn\_author}, \texttt{remove\_book}
+  \item[\cmark] Plans d'abonnement — CRUD complet
+  \item[\cmark] Newsletter : envoi de campagnes email à tous les abonnés actifs
+  \item[\cmark] Statistiques : top 10 livres et auteurs, évolution sur 12 mois
+  \item[\cmark] Rapport financier : revenus, commissions, retraits par mois
+  \item[\cmark] Livre de bienvenue (désignation d'un livre gratuit pour les nouveaux inscrits)
+  \item[\cmark] Paramètres système : panneau de configuration global
+\end{itemize}
+
+\subsection{Pages d'information et de support}
+
+\begin{itemize}
+  \item[\cmark] \texttt{/contact} — Formulaire fonctionnel avec envoi d'email à l'admin (SMTP + \texttt{replyTo})
+  \item[\cmark] \texttt{/help} — FAQ complète : 4 sections, barre de recherche, accordéons, compatible dark mode
+  \item[\cmark] \texttt{/publishing-guide} — Guide de publication : 5 étapes, standards qualité, processus révision
+  \item[\cmark] \texttt{/royalties} — Gains auteurs : tableau des taux, simulateur interactif, conditions de retrait
+  \item[\cmark] \texttt{/terms} — Conditions générales d'utilisation : 10 sections rédigées
+  \item[\cmark] \texttt{/privacy} — Politique de confidentialité : 10 sections rédigées
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Pages à relire et valider par BLAKTEC}
+
+\begin{alertbox}[{\warn\ Attention — Action requise avant mise en production}]
+Les pages listées ci-dessous ont été rédigées sur la base des informations disponibles.
+\textbf{Le contenu doit être relu, validé et complété par BLAKTEC} avant toute mise en ligne officielle.
+\end{alertbox}
+
+\vspace{0.5em}
+
+\begin{tabularx}{\linewidth}{>{\bfseries}p{3.8cm} p{4.2cm} X}
+  \toprule
+  \textbf{Page} & \textbf{Fichier} & \textbf{Points à vérifier} \\
+  \midrule
+  \rowcolor{GrisClair}
+  Royalties & \texttt{royalties.blade.php} &
+    Vérifier les taux de reversement (50\,\%, 65\,\%, 70\,\%) — conformes aux plans réels ? Vérifier le seuil de retrait affiché. \\
+
+  Guide de publication & \texttt{publishing-guide.blade.php} &
+    Confirmer la taille max fichier (100 Mo), le délai de révision (24–48\,h) et les types d'œuvres acceptées. \\
+
+  \rowcolor{GrisClair}
+  Politique de confidentialité & \texttt{privacy.blade.php} &
+    Faire valider par un juriste / DPO. Vérifier la durée de conservation des données, les sous-traitants, et la mention CPDP Cameroun si applicable. \\
+
+  Conditions d'utilisation & \texttt{terms.blade.php} &
+    Faire valider par un juriste. Vérifier la juridiction compétente, la politique de remboursement et les clauses de résiliation. \\
+
+  \rowcolor{GrisClair}
+  Centre d'aide & \texttt{help.blade.php} &
+    Vérifier toutes les réponses FAQ (délais, seuils, politique de téléchargement) selon les décisions de BLAKTEC. \\
+
+  Contact & \texttt{contact.blade.php} &
+    Vérifier le numéro de téléphone (+237 655\,797\,861) et l'adresse (Yaoundé, Cameroun). \\
+  \bottomrule
+\end{tabularx}
+
+\vspace{1em}
+
+\begin{alertbox}[{\warn\ Email de contact}]
+L'email de contact est actuellement \texttt{ocali597198@gmail.com}.
+Pour la mise en production, il est fortement recommandé de configurer un email professionnel
+(ex. \texttt{contact@ocali.com}) via un service SMTP dédié (Mailgun, SendGrid, etc.)
+et de mettre à jour la variable \texttt{MAIL\_FROM\_ADDRESS} dans le fichier \texttt{.env}.
+\end{alertbox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Procédure de déploiement en production}
+
+\subsection{Variables d'environnement (.env)}
+
+\begin{infobox}
+\begin{verbatim}
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://ocali.com
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+MAIL_USERNAME=your_user
+MAIL_PASSWORD=your_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=ocali597198@gmail.com
+MAIL_FROM_NAME="OCaLi"
+\end{verbatim}
+\end{infobox}
+
+\subsection{Commandes à exécuter sur le serveur}
+
+\begin{infobox}
+\begin{verbatim}
+# 1. Migrations + seeds (une seule fois sur un serveur vierge)
+php artisan migrate --seed --force
+
+# 2. Optimisations production
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# 3. Permissions de stockage
+chmod -R 775 storage bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
+\end{verbatim}
+\end{infobox}
+
+\begin{alertbox}[{\warn\ Important}]
+Ne pas exécuter \texttt{db:seed} plusieurs fois sans \texttt{migrate:fresh} pour éviter les entrées dupliquées.
+Les seeds initialisent : 16 catégories, 7 plans d'abonnement, le premier compte admin et les paramètres système.
+\end{alertbox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Résumé}
+
+\begin{center}
+\begin{tabular}{lcc}
+  \toprule
+  \textbf{Domaine} & \textbf{Implémenté} & \textbf{À valider} \\
+  \midrule
+  Architecture \& Auth              & \cmark & — \\
+  Espace Lecteur                    & \cmark & — \\
+  Espace Auteur                     & \cmark & — \\
+  Espace Administrateur             & \cmark & — \\
+  Formulaire de contact             & \cmark & Email pro recommandé \\
+  Centre d'aide (/help)             & \cmark & \warn\ Contenu FAQ \\
+  Guide de publication              & \cmark & \warn\ Paramètres métier \\
+  Royalties                         & \cmark & \warn\ Taux \& seuils \\
+  Conditions d'utilisation          & \cmark & \warn\ Validation juridique \\
+  Politique de confidentialité      & \cmark & \warn\ Validation juridique \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{2em}
+\begin{center}
+  \textcolor{GrisFonce}{\small Rédigé le \textbf{5 Mars 2026} par \textbf{AZANGUE LEONEL DELMAT}, Développeur Web — Pour \textbf{BLAKTEC}, Yaoundé, Cameroun}
+\end{center}
+
+\end{document}
