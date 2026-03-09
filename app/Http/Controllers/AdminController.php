@@ -418,8 +418,13 @@ class AdminController extends Controller
     // Statistics
     public function statistics()
     {
+        $isSqlite = \Illuminate\Support\Facades\DB::getDriverName() === 'sqlite';
+        $select = $isSqlite
+            ? "strftime('%m', created_at) as month, strftime('%Y', created_at) as year, COUNT(*) as count, SUM(amount_paid) as revenue"
+            : 'MONTH(created_at) as month, YEAR(created_at) as year, COUNT(*) as count, SUM(amount_paid) as revenue';
+
         $monthlySubscriptions = Subscription::where('status', 'active')
-            ->selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, COUNT(*) as count, SUM(amount_paid) as revenue')
+            ->selectRaw($select)
             ->groupBy('year', 'month')
             ->orderByDesc('year')
             ->orderByDesc('month')
@@ -448,8 +453,13 @@ class AdminController extends Controller
         $totalWithdrawals = WithdrawalRequest::where('status', 'approved')->sum('amount');
         $pendingWithdrawals = WithdrawalRequest::where('status', 'pending')->sum('amount');
 
+        $isSqlite = \Illuminate\Support\Facades\DB::getDriverName() === 'sqlite';
+        $select = $isSqlite
+            ? "strftime('%m', created_at) as month, strftime('%Y', created_at) as year, SUM(amount_paid) as revenue, SUM(platform_commission) as commission"
+            : 'MONTH(created_at) as month, YEAR(created_at) as year, SUM(amount_paid) as revenue, SUM(platform_commission) as commission';
+
         $monthlyData = Subscription::where('status', 'active')
-            ->selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, SUM(amount_paid) as revenue, SUM(platform_commission) as commission')
+            ->selectRaw($select)
             ->groupBy('year', 'month')
             ->orderByDesc('year')
             ->orderByDesc('month')

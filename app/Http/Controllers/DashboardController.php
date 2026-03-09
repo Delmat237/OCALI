@@ -93,9 +93,14 @@ class DashboardController extends Controller
         $totalViews = $user->books()->sum('views_count');
 
         // Monthly earnings chart data
+        $isSqlite = \Illuminate\Support\Facades\DB::getDriverName() === 'sqlite';
+        $select = $isSqlite
+            ? "strftime('%m', created_at) as month, strftime('%Y', created_at) as year, SUM(amount) as total"
+            : 'MONTH(created_at) as month, YEAR(created_at) as year, SUM(amount) as total';
+
         $monthlyEarnings = $wallet->transactions()
             ->earnings()
-            ->selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, SUM(amount) as total')
+            ->selectRaw($select)
             ->groupBy('year', 'month')
             ->orderBy('year', 'desc')
             ->orderBy('month', 'desc')

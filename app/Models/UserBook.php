@@ -99,7 +99,7 @@ class UserBook extends Model
         $this->update(['last_read_at' => now()]);
     }
 
-    public function addBookmark(int $page, string $note = null): void
+    public function addBookmark(int $page, ?string $note = null): void
     {
         $bookmarks = $this->bookmarks ?? [];
         $bookmarks[] = [

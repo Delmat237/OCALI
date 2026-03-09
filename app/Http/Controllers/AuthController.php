@@ -172,7 +172,10 @@ class AuthController extends Controller
             $socialUser = Socialite::driver('google')->user();
             return $this->handleSocialUser($socialUser);
         } catch (\Exception $e) {
-            Log::error('Google Auth Error: ' . $e->getMessage());
+            Log::error('Google Auth Error: ' . $e->getMessage(), [
+                'exception' => $e,
+                'trace' => $e->getTraceAsString()
+            ]);
             return redirect()->route('login')->with('error', __('messages.social_login_failed'));
         }
     }
@@ -258,6 +261,12 @@ class AuthController extends Controller
             'role'  => ['required', 'in:reader,author'],
             'phone' => ['required', 'string', 'regex:/^\+[1-9]\d{8,14}$/'],
         ]);
+        
+        // Final check to prevent duplicate email error
+        if (User::where('email', $pending['email'])->exists()) {
+            session()->forget('social_pending');
+            return redirect()->route('login')->with('error', __('messages.email_already_registered'));
+        }
 
         // Create local user
         $user = User::create([
