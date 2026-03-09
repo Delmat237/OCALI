@@ -141,11 +141,15 @@ class User extends Authenticatable implements MustVerifyEmail
     // Helpers
     public function hasActiveSubscription(): bool
     {
-        return $this->activeSubscription()->exists();
+        return $this->isAdmin() || $this->activeSubscription()->exists();
     }
 
     public function canReadBooks(): bool
     {
+        if ($this->isAdmin()) {
+            return true;
+        }
+
         $subscription = $this->activeSubscription;
         return $subscription && $subscription->books_remaining > 0;
     }

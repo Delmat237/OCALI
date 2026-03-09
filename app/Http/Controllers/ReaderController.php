@@ -49,8 +49,8 @@ class ReaderController extends Controller
             ->first();
 
         if (!$userBook) {
-            // Check if it's a free welcome book
-            if ($book->is_free_welcome_book) {
+            // Check if it's a free welcome book or user is admin
+            if ($book->is_free_welcome_book || $user->isAdmin()) {
                 $userBook = UserBook::create([
                     'user_id' => $user->id,
                     'book_id' => $book->id,
